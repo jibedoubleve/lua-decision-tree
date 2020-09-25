@@ -36,16 +36,17 @@ namespace LuaDecisionTree.Helpers
                         using (var writer = new StreamWriter(file))
                         {
                             writer.Write(@"
-                                return HasText(
-                                    BadResult(),
-                                    IsZero(
-                                        GoodResult(),
-                                        IsAboveTen(
-                                            GoodResult(),
-                                            BadResult()
-                                        )
-                                    )
-                                )");
+    return HasText(
+        BadResult(),
+        IsZero(
+            GoodResult(),
+            IsAboveTen(
+                GoodResult(),
+                BadResult()
+            )
+        )
+    )
+                        ");
                             writer.Flush();
                         } 
                         Output.Yellow($"Empty script created at {DefaultPath}");
