@@ -16,14 +16,19 @@ namespace LuaDecisionTree
             state.LoadCLRPackage();
             var path = new ScriptPath(scriptPath);
 
-            var script = File.ReadAllText(path.Value);
+            var en = Environment.NewLine;
+            var script = $"function user_script()\n{File.ReadAllText(path.Value)}\nend";
 
             Output.DarkMagenta("THE SCRIPT");
             Output.DarkMagenta("---------------------");
             Output.Cyan(script);
 
             state.DoString("import ('LuaDecisionTree', 'LuaDecisionTree.Decisions')");
-            var result = state.DoString(script);
+            state.DoString(script);
+            var result = state.DoString(@"
+               status, res = pcall(user_script)
+               return res
+            ");
 
             var item = result != null ? result[0] : null;
             if (item is ILeaf algo)
