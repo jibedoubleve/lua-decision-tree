@@ -18,6 +18,8 @@ namespace LuaDecisionTree.Helpers
 
         internal static void Magenta(string message) => Write(message);
 
+        internal static void Red(string message) => Write(message);
+
         public static void Cyan(string messqge) => Write(messqge);
 
         public static void DarkMagenta(string message) => Write(message);

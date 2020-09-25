@@ -1,6 +1,7 @@
 ﻿using LuaDecisionTree.Helpers;
 using LuaDecisionTree.Interpreter;
 using NLua;
+using NLua.Exceptions;
 using System;
 using System.IO;
 
@@ -39,6 +40,10 @@ namespace LuaDecisionTree
             else
             {
                 Output.Magenta($"Result is of type: {(item == null ? "NULL" : result[0].GetType().Name)}");
+                if (result != null && result.Length > 0 && result[0] is LuaScriptException ex)
+                {
+                    Output.Red(ex.Message);
+                }
             }
         }
 
