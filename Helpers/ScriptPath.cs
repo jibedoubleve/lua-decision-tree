@@ -7,7 +7,6 @@ namespace LuaDecisionTree.Helpers
     {
         #region Fields
 
-        private const string defaultPath = @"C:\Users\jibedoubleve\Desktop\Script.lua";
         private readonly string _path;
 
         #endregion Fields
@@ -19,20 +18,44 @@ namespace LuaDecisionTree.Helpers
             _path = path;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        private string DefaultPath => Environment.ExpandEnvironmentVariables(@"%userprofile%\Desktop\Script.lua");
+
         public string Value
         {
             get
             {
                 if (string.IsNullOrEmpty(_path))
                 {
-                    var defautExists = File.Exists(defaultPath);
-                    if (defautExists) { return defaultPath; }
-                    else { throw new ArgumentException($"The script does not exist at '{defaultPath}'"); }
+                    if (File.Exists(DefaultPath) == false)
+                    {
+                        using (var file = File.Create(DefaultPath))
+                        using (var writer = new StreamWriter(file))
+                        {
+                            writer.Write(@"return IsZero(
+            IsAboveTen(
+                GoodResult(),
+                BadResult()
+            ),
+            HasText(
+                BadResult(),
+                GoodResult()
+            )
+        )   ");
+                            writer.Flush();
+                        } 
+                        Output.Yellow($"Empty script created at {DefaultPath}");
+                    }
+                    return DefaultPath;
                 }
                 else if (File.Exists(_path)) { return _path; }
                 else { throw new ArgumentException($"Specified path of the script '{_path}' is not valid or the file doesn not exist"); }
             }
         }
-        #endregion Constructors
+
+        #endregion Properties
     }
 }
